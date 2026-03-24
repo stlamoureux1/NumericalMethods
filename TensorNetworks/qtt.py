@@ -63,7 +63,15 @@ class QTT:
             # This is a tensor contraction: 
             # (current_points, r_left) @ (r_left, 2, r_right)
             # We flatten the existing result to multiply by the next matrix
+
+            # SL: get the next bond-dimension
             r_left = self.cores[i].shape[0]
+            # SL: Contract accordingly
+            # SL:  NOTE: The syntax of numpy's `reshape` function takes the 
+            # argument `-1` to indicate "whatever's left over", i.e.,
+            # if we have cores[i].shape = (r_i, 2, r_{i+1}) and call
+            # cores[i].reshape(-1, 2*r_{i+1}) the result has 
+            # shape (r_i, 2*r_{i+1})
             res = res.reshape(-1, r_left) @ self.cores[i].reshape(r_left, -1)
         return res.flatten()
 
